@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Homepage</title>
+    <link rel="stylesheet" href="School_Website.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="main-header">
+        <!-- Hamburger Menu -->
+        <button class="hamburger-menu" id="hamburgerMenu" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
+        <!-- School Name and Mascot -->
+        <div class="header-brand">
+            <img src="mascot.png" alt="School Mascot" class="mascot-image" id="mascotImage">
+            <h1 class="school-name" id="headerSchoolName">Lincoln High School</h1>
+        </div>
+        
+        <!-- Audio Control -->
+        <div class="audio-control">
+            <button id="audioToggle" class="audio-btn" aria-label="Toggle music">
+                <i class="fas fa-volume-up"></i>
+            </button>
+            <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="50">
+        </div>
+    </header>
+    
+    <!-- Navigation Sidebar -->
+    <nav class="nav-sidebar" id="navSidebar">
+        <div class="nav-header">
+            <h2>Navigation</h2>
+            <button class="close-nav" id="closeNav" aria-label="Close menu">&times;</button>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
+            <li><a href="#academics"><i class="fas fa-graduation-cap"></i> Academics</a></li>
+            <li><a href="#admissions"><i class="fas fa-user-plus"></i> Admissions</a></li>
+            <li><a href="#athletics"><i class="fas fa-trophy"></i> Athletics</a></li>
+            <li><a href="#events"><i class="fas fa-calendar"></i> Events</a></li>
+            <li><a href="#news"><i class="fas fa-newspaper"></i> News</a></li>
+            <li><a href="#gallery"><i class="fas fa-images"></i> Gallery</a></li>
+            <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+        </ul>
+    </nav>
+    
+    <!-- Overlay for mobile menu -->
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section with Quote/Mission -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="mission-statement">
+                    <blockquote id="schoolQuote">
+                        "Excellence in Education, Character in Action"
+                    </blockquote>
+                    <p class="founding-info">
+                        <span id="founderName">Founded by John Lincoln</span> | 
+                        <span id="foundingYear">Established 1925</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Photo Gallery Carousel -->
+        <section class="photo-gallery">
+            <h2>Campus Life</h2>
+            <div class="carousel-container">
+                <button class="carousel-btn prev" id="prevBtn" aria-label="Previous">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <div class="carousel-images" id="carouselImages">
+                    <!-- Images will be dynamically loaded -->
+                </div>
+                
+                <button class="carousel-btn next" id="nextBtn" aria-label="Next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <div class="carousel-dots" id="carouselDots">
+                <!-- Dots will be dynamically generated -->
+            </div>
+        </section>
+        
+        <!-- 3D Campus Map Section -->
+        <section class="campus-map-section">
+            <h2>Interactive Campus Map</h2>
+            <p class="map-description">Explore our campus in 3D. Click and drag to rotate, scroll to zoom, right-click and drag to pan.</p>
+            
+            <div class="map-container">
+                <canvas id="campusMap3D"></canvas>
+                
+                <!-- Map Controls -->
+                <div class="map-controls">
+                    <button class="map-btn" id="resetCamera" title="Reset View">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                    <button class="map-btn" id="toggleLabels" title="Toggle Labels">
+                        <i class="fas fa-tag"></i>
+                    </button>
+                    <button class="map-btn" id="toggleGrid" title="Toggle Grid">
+                        <i class="fas fa-border-all"></i>
+                    </button>
+                    <button class="map-btn" id="toggleQuality" title="Graphics Quality">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+                
+                <!-- Quality Settings Panel -->
+                <div class="quality-panel" id="qualityPanel">
+                    <h4>Graphics Quality</h4>
+                    <div class="quality-options">
+                        <button class="quality-btn" data-quality="low">Low</button>
+                        <button class="quality-btn active" data-quality="medium">Medium</button>
+                        <button class="quality-btn" data-quality="high">High</button>
+                    </div>
+                    <div class="fps-counter">
+                        <span>FPS: <strong id="fpsDisplay">60</strong></span>
+                    </div>
+                </div>
+                
+                <!-- Building Information Panel -->
+                <div class="building-info-panel" id="buildingInfoPanel">
+                    <button class="close-info" id="closeInfo">&times;</button>
+                    <h3 id="buildingName">Building Name</h3>
+                    <p id="buildingDescription">Building description will appear here.</p>
+                    <div class="building-details" id="buildingDetails"></div>
+                </div>
+                
+                <!-- Loading Indicator -->
+                <div class="map-loading" id="mapLoading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading Campus Map...</p>
+                </div>
+            </div>
+            
+            <!-- Legend -->
+            <div class="map-legend">
+                <h4>Campus Buildings</h4>
+                <div class="legend-items" id="legendItems">
+                    <!-- Legend items will be dynamically generated -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- News and Articles Section -->
+        <section class="news-section">
+            <h2>Latest News & Announcements</h2>
+            <div class="news-grid" id="newsGrid">
+                <!-- News articles will be dynamically loaded -->
+            </div>
+            <button class="view-more-btn" id="viewMoreNews">View All News</button>
+        </section>
+        
+        <!-- Quick Links Section -->
+        <section class="quick-links">
+            <h2>Quick Links</h2>
+            <div class="links-grid">
+                <a href="#calendar" class="link-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>School Calendar</h3>
+                </a>
+                <a href="#portal" class="link-card">
+                    <i class="fas fa-user"></i>
+                    <h3>Student Portal</h3>
+                </a>
+                <a href="#resources" class="link-card">
+                    <i class="fas fa-book"></i>
+                    <h3>Resources</h3>
+                </a>
+                <a href="#forms" class="link-card">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>Forms & Documents</h3>
+                </a>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer Section -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <!-- Contact Information -->
+            <div class="footer-section contact-info">
+                <h3>Contact Information</h3>
+                <p class="address">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="schoolAddress">1234 Education Drive, Springfield, IL 62701</span>
+                </p>
+                <p class="phone">
+                    <i class="fas fa-phone"></i>
+                    <span id="schoolPhone">(555) 123-4567</span>
+                </p>
+                <p class="email">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:info@lincolnhs.edu" id="schoolEmail">info@lincolnhs.edu</a>
+                </p>
+            </div>
+            
+            <!-- Leadership -->
+            <div class="footer-section leadership">
+                <h3>School Leadership</h3>
+                <p>
+                    <strong>Principal:</strong> 
+                    <span id="principalName">Dr. Sarah Johnson</span>
+                </p>
+                <p>
+                    <strong>Vice Principal:</strong> 
+                    <span id="vpName">Mr. Michael Chen</span>
+                </p>
+            </div>
+            
+            <!-- Social Media Links -->
+            <div class="footer-section social-media">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#" class="social-icon" aria-label="Facebook" id="facebookLink">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="#" class="social-icon" aria-label="Twitter" id="twitterLink">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-icon" aria-label="Instagram" id="instagramLink">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-icon" aria-label="YouTube" id="youtubeLink">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="#" class="social-icon" aria-label="LinkedIn" id="linkedinLink">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="footer-bottom">
+            <p id="footerCopyright">&copy; 2025 Lincoln High School. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <!-- Hidden Audio Element -->
+    <audio id="schoolAudio" loop>
+        <source src="school-song.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <!-- Three.js Library for 3D Map -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script src="School_Website.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+<!-- 
+
+!!!!! Change hover effects for social media links !!!!!
+
+
+!!!!! Make a different version to give a second option !!!!!
+
+
+!!!!! Start making the mobile app for Android and Apple !!!!!
+
+
+!!!!! Make parallax scrolling feature !!!!!
+ 
+
+!!!!! Put map in a secure location only for parents and students (for safety reasons) !!!!!
+
+
+!!!!! Make map realistic !!!!!
+
+
+!!!!! Cybersecurity issues !!!!!
+
+
+ -->
+
+
+
+<!-- 
+
+
+
+
+3D Map of campus
+
+
+
+
+I want to build a general school website. I want to be able to make changes to it based on the school it is for.
+I want it to have the folloiwng features: 
+
+
+(1) A login page with the following features:
+
+
+    a. A central panel for login and username that has slight opacity and colors that are similar to the school 
+        colors
+    b. Buttons for signing in and two factor authentication
+    c. Links to the following things:
+        1. Forgot Username/Password
+        2. Terms of Use
+        3. Privacy Policy 
+        4. @Copyright 
+    d. A picture of the school behind the login panel.
+
+(2) A homepage with the following features:
+
+    a. The homepage should be all about the school - 
+    b. School song on homepage of website, volume adjuster or mute function (not needed on app)
+    c. School photos of campus 
+    d. School quote or mission statement or founder quote and year of founding
+        - History of the school
+    e. School name header with mascot picture
+    f. Address/phone/principal and Vp name/social media links as footer in smaller font
+    g. Hamburger style menu to link to other areas on the website
+    h. Articles and news about the school
+
+    i. A way to show students how the path they are on will lead to making money
+    j. A parallax scrolling feature that shows students walking toward their goals                          
+    k. A class schedule and course tracker
+
+    l. A "spotlight teacher" feature
+    m. A "spotlight student" feature
+
+For the login page, output the code the 3 separate files: School_Website_Login.html, School_Website_Login.css, and
+    School_Website_Login.js
+    
+For the home page, output the code the 3 separate files: School_Website.html, School_Website.css, and
+    School_Website.js
+
+
+
+ -->
+
+
+<!-- 
+
+Documentation
+
+
+
+head.txt
+    meta_charset=UTF-8
+    meta name=viewport_content=width=device-width_initial-scale=1.0
+    title
+    link_rel=stylesheet_href=School_Website.css
+    link_rel=stylesheet_href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css
+
+
+body.txt
+
+<header class="main-header">
+<button class="hamburger-menu" id="hamburgerMenu" aria-label="Menu">
+
+
+
+
+
+
+
+
+
+ -->
