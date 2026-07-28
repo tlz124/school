@@ -281,9 +281,14 @@ section{ padding: 96px 24px; }
   border-radius: var(--radius);
   box-shadow: var(--shadow-soft);
 }
-@media (max-width: 760px){
-  .welcome-media img{ aspect-ratio: 4 / 3; } /* flatter crop on mobile so it doesn't dominate a narrow column */
-}
+/* Note: no mobile-specific aspect-ratio override here anymore — a 4:3
+   override was tried previously, but on a tall portrait source photo
+   that ratio only has room for ~50% of the image's vertical content,
+   and combined with a top-weighted crop point it showed only ceiling
+   and windows with the desks cropped out entirely. The 3:4 ratio above
+   keeps far more of the frame and isn't excessively tall on mobile
+   (≈456px on a 342px-wide column) now that aspect-ratio is correctly
+   applied. */
 .welcome-copy h2{ font-size: clamp(1.8rem, 3.2vw, 2.5rem); margin-bottom: 18px; max-width: 16ch; }
 .welcome-copy p{ color: var(--char-soft); font-size: 1.03rem; }
 .check-list{ margin: 24px 0; display: grid; gap: 12px; }
