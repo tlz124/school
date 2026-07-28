@@ -272,7 +272,18 @@ section{ padding: 96px 24px; }
   max-width: var(--container); margin: 0 auto; padding: 96px 24px;
   display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 64px; align-items: center;
 }
-.welcome-media img{ border-radius: var(--radius); box-shadow: var(--shadow-soft); }
+.welcome-media img{
+  width: 100%;
+  height: auto; /* without this, the HTML height="1800" attribute wins and disables aspect-ratio below */
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center 25%;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+@media (max-width: 760px){
+  .welcome-media img{ aspect-ratio: 4 / 3; } /* flatter crop on mobile so it doesn't dominate a narrow column */
+}
 .welcome-copy h2{ font-size: clamp(1.8rem, 3.2vw, 2.5rem); margin-bottom: 18px; max-width: 16ch; }
 .welcome-copy p{ color: var(--char-soft); font-size: 1.03rem; }
 .check-list{ margin: 24px 0; display: grid; gap: 12px; }
@@ -316,7 +327,7 @@ section{ padding: 96px 24px; }
 }
 .gallery-item{ margin: 0; border-radius: var(--radius); overflow: hidden; position: relative; background: var(--ink-2); }
 .gallery-item.span-2{ grid-column: span 2; }
-.gallery-item img{ width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3; transition: transform 0.4s ease; }
+.gallery-item img{ width: 100%; height: auto; object-fit: cover; aspect-ratio: 4/3; transition: transform 0.4s ease; }
 .gallery-item:hover img{ transform: scale(1.04); }
 .gallery-item figcaption{
   position: absolute; inset: auto 0 0 0; padding: 16px; font-size: 0.85rem;

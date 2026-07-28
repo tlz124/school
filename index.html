@@ -9,7 +9,472 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="School.css">
+<style>
+/* ============================================================
+   Alder Creek School — stylesheet
+   Palette pulled from campus photography:
+     --ink       deep navy, from hallway/desk steel     #1E3446
+     --coral     uniform / signal orange                #E15A2D
+     --marigold  cafeteria wall yellow                  #E8A73B
+     --moss      corridor plant green                   #4B6B44
+     --paper     warm cream, sunlit classroom walls      #F6EFE1
+     --char      near-black warm ink for body text       #241F1B
+   ============================================================ */
+
+:root{
+  --ink: #1E3446;
+  --ink-2: #16283A;
+  --coral: #E1592C;
+  --coral-2: #C7451D;
+  --marigold: #E8A73B;
+  --moss: #4B6B44;
+  --paper: #F6EFE1;
+  --paper-2: #EFE5D0;
+  --char: #241F1B;
+  --char-soft: #4A443C;
+  --line: rgba(36, 31, 27, 0.14);
+  --white: #FFFDF8;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --radius: 10px;
+  --container: 1200px;
+  --shadow-soft: 0 12px 30px -14px rgba(30, 52, 70, 0.35);
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  *, *::before, *::after{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+html, body{
+  max-width: 100%;
+  overflow-x: hidden; /* safety net: nothing should cause horizontal scroll on mobile */
+}
+
+body{
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--char);
+  background: var(--paper);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body.menu-open{ overflow: hidden; } /* lock background scroll while mobile menu is open */
+
+a, button{ -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+
+img{ max-width: 100%; display: block; }
+a{ color: inherit; text-decoration: none; }
+ul{ margin: 0; padding: 0; list-style: none; }
+h1, h2, h3{ font-family: var(--font-display); margin: 0; color: var(--ink); }
+p{ margin: 0 0 1em; }
+button{ font-family: inherit; cursor: pointer; }
+
+.skip-link a{
+  position: absolute; left: -999px; top: 0; background: var(--ink); color: var(--white);
+  padding: 12px 18px; z-index: 999; border-radius: 0 0 8px 0;
+}
+.skip-link a:focus{ left: 0; }
+
+:focus-visible{ outline: 3px solid var(--coral); outline-offset: 3px; }
+
+/* ---------- Wayfinding "plaque" signature element ---------- */
+.plaque{
+  display: inline-flex; align-items: stretch; gap: 0; margin: 0 0 18px;
+  font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.04em;
+  border-radius: 6px; overflow: hidden; box-shadow: var(--shadow-soft);
+}
+.plaque-code{
+  background: var(--ink); color: var(--white); padding: 7px 12px; font-weight: 600;
+}
+.plaque-label{
+  background: var(--white); color: var(--ink); padding: 7px 12px; text-transform: uppercase;
+  border: 1px solid var(--line); border-left: none;
+}
+.plaque-dark .plaque-code{ background: var(--coral); }
+.plaque-invert .plaque-code{ background: var(--marigold); color: var(--ink); }
+.plaque-invert .plaque-label{ background: rgba(255,255,255,0.08); color: var(--white); border-color: rgba(255,255,255,0.25); }
+
+/* Anchor targets need breathing room so the sticky header doesn't
+   cover the heading you just navigated to (matters most on mobile,
+   where the header takes up a bigger share of a short viewport). */
+#top, #welcome, #academics, #campus-life, #bells, #news, #admissions{
+  scroll-margin-top: 76px;
+}
+
+/* ================= HEADER ================= */
+.site-header{
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(246, 239, 225, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.header-inner{
+  max-width: var(--container); margin: 0 auto; padding: 12px 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.brand{ display: flex; align-items: center; gap: 12px; min-width: 0; }
+.brand-mark{ color: var(--coral); flex-shrink: 0; }
+.brand-text{ display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+.brand-name{
+  font-family: var(--font-display); font-weight: 600; font-size: 1.15rem; color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.brand-sub{ font-family: var(--font-mono); font-size: 0.68rem; color: var(--char-soft); letter-spacing: 0.03em; white-space: nowrap; }
+
+@media (max-width: 400px){
+  .brand-name{ font-size: 1rem; }
+  .brand-sub{ display: none; } /* first thing to drop on very narrow phones */
+  .header-inner{ gap: 12px; }
+}
+
+.main-nav{ display: flex; align-items: center; gap: 28px; font-weight: 600; font-size: 0.94rem; }
+.main-nav a{ color: var(--ink); position: relative; padding: 4px 0; }
+.main-nav a:not(.nav-cta)::after{
+  content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; background: var(--coral);
+  transform: scaleX(0); transform-origin: left; transition: transform 0.2s ease;
+}
+.main-nav a:not(.nav-cta):hover::after{ transform: scaleX(1); }
+.nav-cta{
+  background: var(--coral); color: var(--white) !important; padding: 9px 18px; border-radius: 999px;
+  transition: background 0.2s ease;
+}
+.nav-cta:hover{ background: var(--coral-2); }
+
+.nav-toggle{
+  display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+  width: 44px; height: 44px; background: none; border: none; padding: 0; flex-shrink: 0;
+}
+.nav-toggle span{ width: 100%; height: 2.5px; background: var(--ink); border-radius: 2px; transition: transform 0.2s ease, opacity 0.2s ease; }
+.nav-toggle[aria-expanded="true"] span:nth-child(1){ transform: translateY(7.5px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2){ opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3){ transform: translateY(-7.5px) rotate(-45deg); }
+
+/* ---------- Mobile menu (sibling of <header>, see index.html for why) ---------- */
+.mobile-menu{
+  display: none; /* enabled only under the mobile breakpoint below */
+  position: fixed; inset: 0; z-index: 200;
+}
+.mobile-menu.is-open{ display: block; }
+
+.mobile-menu-backdrop{
+  position: absolute; inset: 0;
+  background: rgba(22, 40, 58, 0.55);
+  opacity: 0; transition: opacity 0.25s ease;
+}
+.mobile-menu.is-open .mobile-menu-backdrop{ opacity: 1; }
+
+.mobile-menu-panel{
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: min(86vw, 360px);
+  background: var(--paper);
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 20px 24px 32px;
+  box-shadow: -12px 0 30px -12px rgba(22, 40, 58, 0.35);
+  transform: translateX(100%);
+  transition: transform 0.28s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.mobile-menu.is-open .mobile-menu-panel{ transform: translateX(0); }
+
+.mobile-menu-head{
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 16px; margin-bottom: 8px; border-bottom: 1px solid var(--line);
+}
+.mobile-menu-head .brand-name{ font-size: 1.05rem; }
+.mobile-menu-close{
+  width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; line-height: 1; background: none; border: none; color: var(--ink); border-radius: 8px;
+}
+.mobile-menu-close:hover{ background: var(--paper-2); }
+
+.mobile-menu-panel a{
+  padding: 14px 8px; font-weight: 700; font-size: 1.05rem; color: var(--ink);
+  border-radius: 8px; min-height: 44px; display: flex; align-items: center;
+}
+.mobile-menu-panel a:hover, .mobile-menu-panel a:focus-visible{ background: var(--paper-2); }
+.mobile-menu-panel a.nav-cta{
+  justify-content: center; margin-top: 12px; background: var(--coral); color: var(--white);
+}
+.mobile-menu-panel a.nav-cta:hover{ background: var(--coral-2); }
+
+/* ================= HERO ================= */
+.hero{
+  position: relative; min-height: 88vh; display: flex; align-items: flex-end;
+  overflow: hidden; color: var(--white);
+}
+@supports (height: 100svh){
+  .hero{ min-height: 88svh; } /* avoids the jump-scroll caused by mobile address-bar resizing */
+}
+.hero-media{ position: absolute; inset: 0; }
+.hero-media img{ width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+.hero-scrim{
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(22,40,58,0.55) 0%, rgba(22,40,58,0.35) 35%, rgba(22,40,58,0.92) 100%);
+}
+.hero-content{
+  position: relative; z-index: 2; max-width: var(--container); margin: 0 auto;
+  padding: 0 24px 88px; width: 100%;
+}
+.hero-content .plaque-code{ background: var(--coral); }
+.hero h1{
+  color: var(--white); font-size: clamp(2.6rem, 6vw, 4.6rem); font-weight: 600; line-height: 1.03;
+  margin: 0 0 22px; max-width: 14ch;
+}
+.hero-lede{ font-size: 1.15rem; max-width: 46ch; color: rgba(255,255,255,0.9); margin-bottom: 32px; }
+.hero-actions{ display: flex; gap: 16px; flex-wrap: wrap; }
+
+.btn{
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 14px 26px; border-radius: 999px; font-weight: 700; font-size: 0.98rem;
+  border: 2px solid transparent; transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.btn:hover{ transform: translateY(-2px); }
+.btn-primary{ background: var(--coral); color: var(--white); }
+.btn-primary:hover{ background: var(--coral-2); }
+.btn-ghost{ background: transparent; border-color: rgba(255,255,255,0.55); color: var(--white); }
+.btn-ghost:hover{ border-color: var(--white); background: rgba(255,255,255,0.1); }
+.btn-invert{ background: var(--marigold); color: var(--ink); }
+.btn-invert:hover{ background: #f0b656; }
+
+.scroll-cue{
+  position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 2;
+  width: 30px; height: 46px; border: 2px solid rgba(255,255,255,0.7); border-radius: 20px;
+}
+.scroll-cue span{
+  position: absolute; top: 8px; left: 50%; width: 5px; height: 8px; background: var(--white);
+  border-radius: 3px; transform: translateX(-50%); animation: scrollcue 1.8s ease-in-out infinite;
+}
+@keyframes scrollcue{
+  0%{ opacity: 1; top: 8px; } 70%{ opacity: 0; top: 24px; } 100%{ opacity: 0; top: 24px; }
+}
+
+/* ================= STAT STRIP ================= */
+.stat-strip{
+  background: var(--ink); color: var(--white);
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  max-width: var(--container); margin: 0 auto;
+}
+.stat{ padding: 40px 20px; text-align: center; border-right: 1px solid rgba(255,255,255,0.12); }
+.stat:last-child{ border-right: none; }
+.stat-num{
+  display: block; font-family: var(--font-mono); font-weight: 600; font-size: clamp(1.8rem, 4vw, 2.6rem);
+  color: var(--marigold);
+}
+.stat-label{ font-size: 0.85rem; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* ================= SHARED SECTION SPACING ================= */
+section{ padding: 96px 24px; }
+.section-head{ max-width: var(--container); margin: 0 auto 48px; }
+.section-head h2{ font-size: clamp(1.8rem, 3.4vw, 2.6rem); margin: 0 0 14px; }
+.section-lede{ max-width: 60ch; font-size: 1.08rem; color: var(--char-soft); }
+.section-head.light .plaque-label{ }
+
+/* ================= WELCOME ================= */
+.welcome{
+  max-width: var(--container); margin: 0 auto; padding: 96px 24px;
+  display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 64px; align-items: center;
+}
+.welcome-media img{
+  width: 100%;
+  height: auto; /* without this, the HTML height="1800" attribute wins and disables aspect-ratio below */
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center 25%;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+@media (max-width: 760px){
+  .welcome-media img{ aspect-ratio: 4 / 3; } /* flatter crop on mobile so it doesn't dominate a narrow column */
+}
+.welcome-copy h2{ font-size: clamp(1.8rem, 3.2vw, 2.5rem); margin-bottom: 18px; max-width: 16ch; }
+.welcome-copy p{ color: var(--char-soft); font-size: 1.03rem; }
+.check-list{ margin: 24px 0; display: grid; gap: 12px; }
+.check-list li{
+  position: relative; padding-left: 28px; color: var(--char); font-weight: 500;
+}
+.check-list li::before{
+  content: ""; position: absolute; left: 0; top: 5px; width: 16px; height: 16px; border-radius: 4px;
+  background: var(--moss);
+}
+.text-link{ font-weight: 700; color: var(--coral); border-bottom: 2px solid transparent; transition: border-color 0.2s ease; }
+.text-link:hover{ border-color: var(--coral); }
+
+/* ================= ACADEMICS ================= */
+.academics{ background: var(--white); }
+.track-grid{
+  max-width: var(--container); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+}
+.track-card{
+  background: var(--paper); border-radius: var(--radius); padding: 32px 28px; border-top: 6px solid var(--ink);
+  box-shadow: var(--shadow-soft);
+}
+.track-coral{ border-top-color: var(--coral); }
+.track-marigold{ border-top-color: var(--marigold); }
+.track-moss{ border-top-color: var(--moss); }
+.track-code{ font-family: var(--font-mono); font-size: 0.78rem; color: var(--char-soft); margin-bottom: 10px; letter-spacing: 0.04em; }
+.track-card h3{ font-size: 1.5rem; margin-bottom: 14px; }
+.track-card h3 span{ display: block; font-family: var(--font-body); font-weight: 600; font-size: 0.95rem; color: var(--char-soft); margin-top: 4px; }
+.track-card p{ color: var(--char-soft); }
+.track-card ul{ display: grid; gap: 8px; margin-top: 16px; }
+.track-card ul li{ padding-left: 20px; position: relative; font-size: 0.95rem; font-weight: 500; }
+.track-card ul li::before{ content: "\2013"; position: absolute; left: 0; color: var(--coral); font-weight: 700; }
+
+/* ================= CAMPUS LIFE (dark section) ================= */
+.campus-life{ background: var(--ink); color: var(--white); }
+.section-head.light h2{ color: var(--white); }
+.section-head.light .section-lede{ color: rgba(255,255,255,0.75); }
+.gallery{
+  max-width: var(--container); margin: 0 auto; display: grid;
+  grid-template-columns: repeat(4, 1fr); gap: 20px;
+}
+.gallery-item{ margin: 0; border-radius: var(--radius); overflow: hidden; position: relative; background: var(--ink-2); }
+.gallery-item.span-2{ grid-column: span 2; }
+.gallery-item img{ width: 100%; height: auto; object-fit: cover; aspect-ratio: 4/3; transition: transform 0.4s ease; }
+.gallery-item:hover img{ transform: scale(1.04); }
+.gallery-item figcaption{
+  position: absolute; inset: auto 0 0 0; padding: 16px; font-size: 0.85rem;
+  background: linear-gradient(0deg, rgba(22,40,58,0.92) 0%, rgba(22,40,58,0) 100%);
+  color: rgba(255,255,255,0.9);
+}
+
+/* ================= BELLS ================= */
+.bells{ background: var(--paper-2); }
+.bell-board{
+  max-width: var(--container); margin: 0 auto; display: grid; gap: 2px;
+  background: var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-soft);
+}
+.bell-row{
+  display: grid; grid-template-columns: 140px 1fr 160px; align-items: center; gap: 16px;
+  background: var(--white); padding: 16px 24px; font-size: 0.95rem;
+}
+.bell-row .b-time{ font-family: var(--font-mono); color: var(--char-soft); font-size: 0.88rem; }
+.bell-row .b-name{ font-weight: 700; color: var(--ink); }
+.bell-row .b-status{ font-family: var(--font-mono); font-size: 0.78rem; text-align: right; text-transform: uppercase; color: var(--char-soft); }
+.bell-row.is-now{ background: var(--coral); }
+.bell-row.is-now .b-time, .bell-row.is-now .b-name, .bell-row.is-now .b-status{ color: var(--white); }
+.bell-row.is-now .b-status{ font-weight: 700; }
+.bell-row.is-done{ opacity: 0.55; }
+.bell-note{ max-width: var(--container); margin: 18px auto 0; font-family: var(--font-mono); font-size: 0.85rem; color: var(--char-soft); }
+
+/* ================= NEWS ================= */
+.news-grid{
+  max-width: var(--container); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+}
+.news-card{
+  background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.news-card:hover{ box-shadow: var(--shadow-soft); transform: translateY(-3px); }
+.news-date{ font-family: var(--font-mono); font-size: 0.78rem; color: var(--coral); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+.news-card h3{ font-size: 1.2rem; margin-bottom: 10px; }
+.news-card p:last-child{ color: var(--char-soft); font-size: 0.95rem; margin-bottom: 0; }
+
+/* ================= ADMISSIONS ================= */
+.admissions{ background: var(--ink); color: var(--white); }
+.admissions-inner{ max-width: 720px; margin: 0 auto; text-align: left; }
+.admissions h2{ color: var(--white); font-size: clamp(1.8rem, 3.4vw, 2.5rem); margin-bottom: 16px; max-width: 18ch; }
+.admissions > .admissions-inner > p{ color: rgba(255,255,255,0.78); max-width: 55ch; margin-bottom: 36px; font-size: 1.05rem; }
+
+.admissions-form{
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.16); border-radius: var(--radius);
+  padding: 32px; display: grid; gap: 20px;
+}
+.form-row{ display: flex; flex-direction: column; gap: 8px; }
+.form-row label{ font-size: 0.85rem; font-weight: 600; color: rgba(255,255,255,0.85); }
+.form-row input, .form-row select{
+  padding: 13px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.95); color: var(--char); font-family: var(--font-body);
+  font-size: 1rem; /* keep at/above 16px so iOS Safari doesn't zoom the page in on focus */
+  min-height: 44px;
+}
+.form-row input:focus, .form-row select:focus{ outline: 3px solid var(--marigold); outline-offset: 1px; }
+.admissions-form .btn{ justify-self: start; }
+.form-status{ font-size: 0.9rem; margin: 0; min-height: 1.2em; color: var(--marigold); font-weight: 600; }
+
+/* ================= FOOTER ================= */
+.site-footer{ background: var(--ink-2); color: rgba(255,255,255,0.85); padding: 64px 24px 24px; }
+.footer-grid{
+  max-width: var(--container); margin: 0 auto 48px; display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px;
+}
+.footer-brand{ display: flex; gap: 12px; align-items: flex-start; }
+.footer-brand .brand-mark{ color: var(--coral); margin-top: 2px; }
+.footer-brand p{ font-family: var(--font-display); font-size: 1.05rem; color: var(--white); font-weight: 600; margin: 0; }
+.footer-brand p span{ display: block; font-family: var(--font-mono); font-size: 0.72rem; color: rgba(255,255,255,0.55); font-weight: 400; margin-top: 4px; }
+.footer-col h4{ font-family: var(--font-body); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--marigold); margin-bottom: 14px; }
+.footer-col p{ font-size: 0.92rem; margin-bottom: 10px; }
+.footer-col a:hover{ text-decoration: underline; }
+.footer-bottom{
+  max-width: var(--container); margin: 0 auto; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.12);
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+  font-size: 0.82rem; color: rgba(255,255,255,0.55);
+}
+.back-to-top{ background: none; border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.85); padding: 8px 16px; border-radius: 999px; font-size: 0.82rem; }
+.back-to-top:hover{ background: rgba(255,255,255,0.1); }
+
+/* ================= SCROLL REVEAL ================= */
+.reveal{ opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.is-visible{ opacity: 1; transform: translateY(0); }
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 980px){
+  .welcome{ grid-template-columns: 1fr; }
+  .track-grid{ grid-template-columns: 1fr; }
+  .news-grid{ grid-template-columns: 1fr; }
+  .gallery{ grid-template-columns: repeat(2, 1fr); }
+  .gallery-item.span-2{ grid-column: span 2; }
+  .footer-grid{ grid-template-columns: 1fr 1fr; }
+  .stat-strip{ grid-template-columns: repeat(2, 1fr); }
+  .stat:nth-child(2){ border-right: none; }
+  .stat:nth-child(1), .stat:nth-child(2){ border-bottom: 1px solid rgba(255,255,255,0.12); }
+}
+
+@media (max-width: 760px){
+  .main-nav{ display: none; } /* replaced by the .mobile-menu overlay */
+  .mobile-menu{ display: block; }
+  .mobile-menu:not(.is-open){ visibility: hidden; pointer-events: none; }
+  .nav-toggle{ display: flex; }
+
+  .hero{ min-height: 92vh; }
+  @supports (height: 100svh){ .hero{ min-height: 92svh; } }
+  .hero-content{ padding: 0 20px 56px; }
+  .hero-lede{ font-size: 1.02rem; }
+
+  .plaque{ font-size: 0.72rem; }
+
+  .bell-row{ grid-template-columns: 1fr; text-align: left; gap: 4px; padding: 14px 18px; }
+  .bell-row .b-status{ text-align: left; }
+
+  .admissions-form{ padding: 24px 20px; }
+
+  .footer-grid{ grid-template-columns: 1fr; }
+  section{ padding: 64px 20px; }
+}
+
+@media (max-width: 520px){
+  .gallery{ grid-template-columns: 1fr; }
+  .gallery-item.span-2{ grid-column: span 1; }
+  .hero-actions{ flex-direction: column; align-items: stretch; }
+  .hero-actions .btn{ width: 100%; }
+}
+
+/* Landscape phones: 92svh can clip content when the viewport is short and wide */
+@media (max-width: 900px) and (max-height: 480px) and (orientation: landscape){
+  .hero{ min-height: auto; padding-top: 120px; }
+  .hero-content{ padding-bottom: 40px; }
+}
+
+</style>
 </head>
 <body>
 
@@ -316,6 +781,295 @@
   </div>
 </footer>
 
-<script src="School.js"></script>
+<script>
+/* ============================================================
+   Alder Creek School — School.js
+   Handles: mobile nav, scroll reveal, animated stat counters,
+   the live bell-schedule widget, and the admissions form.
+   ============================================================ */
+(function () {
+  "use strict";
+
+  document.addEventListener("DOMContentLoaded", function () {
+    initNav();
+    initScrollReveal();
+    initStatCounters();
+    initBellSchedule();
+    initAdmissionsForm();
+    initFooterExtras();
+  });
+
+  /* ---------------- Mobile nav ----------------
+     The mobile menu is a standalone overlay (see index.html) so it isn't
+     boxed in by the header's backdrop-filter containing block. This
+     handles opening/closing it, locking background scroll, closing on
+     backdrop click or Escape, and returning focus to the toggle button. */
+  function initNav() {
+    var toggle = document.getElementById("nav-toggle");
+    var menu = document.getElementById("mobile-menu");
+    var closeBtn = document.getElementById("mobile-menu-close");
+    var backdrop = document.getElementById("mobile-menu-backdrop");
+    if (!toggle || !menu) return;
+
+    function openMenu() {
+      menu.classList.add("is-open");
+      menu.setAttribute("aria-hidden", "false");
+      toggle.setAttribute("aria-expanded", "true");
+      toggle.setAttribute("aria-label", "Close navigation menu");
+      document.body.classList.add("menu-open");
+      var firstLink = menu.querySelector(".mobile-menu-panel a");
+      if (firstLink) firstLink.focus();
+    }
+
+    function closeMenu(returnFocus) {
+      menu.classList.remove("is-open");
+      menu.setAttribute("aria-hidden", "true");
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", "Open navigation menu");
+      document.body.classList.remove("menu-open");
+      if (returnFocus) toggle.focus();
+    }
+
+    toggle.addEventListener("click", function () {
+      var isOpen = menu.classList.contains("is-open");
+      if (isOpen) { closeMenu(true); } else { openMenu(); }
+    });
+
+    if (closeBtn) closeBtn.addEventListener("click", function () { closeMenu(true); });
+    if (backdrop) backdrop.addEventListener("click", function () { closeMenu(true); });
+
+    // Close whenever a nav link is chosen.
+    menu.querySelectorAll(".mobile-menu-panel a").forEach(function (link) {
+      link.addEventListener("click", function () { closeMenu(false); });
+    });
+
+    // Escape closes it; keep focus inside the panel while open.
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape" && e.keyCode !== 27) return;
+      if (menu.classList.contains("is-open")) closeMenu(true);
+    });
+
+    // If the viewport is resized past the mobile breakpoint while the
+    // menu is open (e.g. rotating a tablet), close it so it can't get
+    // stuck open behind the desktop layout.
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 760 && menu.classList.contains("is-open")) {
+        closeMenu(false);
+      }
+    });
+  }
+
+  /* ---------------- Scroll reveal ---------------- */
+  function initScrollReveal() {
+    var targets = document.querySelectorAll(
+      ".welcome, .track-card, .gallery-item, .news-card, .stat"
+    );
+    targets.forEach(function (el) { el.classList.add("reveal"); });
+
+    if (!("IntersectionObserver" in window)) {
+      targets.forEach(function (el) { el.classList.add("is-visible"); });
+      return;
+    }
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    targets.forEach(function (el) { observer.observe(el); });
+  }
+
+  /* ---------------- Animated stat counters ---------------- */
+  function initStatCounters() {
+    var nums = document.querySelectorAll(".stat-num");
+    if (!nums.length) return;
+
+    var animated = false;
+
+    function runCount() {
+      if (animated) return;
+      animated = true;
+      nums.forEach(function (el) {
+        var target = parseInt(el.getAttribute("data-count"), 10) || 0;
+        var suffix = el.getAttribute("data-suffix") || "";
+        var duration = 1200;
+        var start = null;
+
+        function step(timestamp) {
+          if (start === null) start = timestamp;
+          var progress = Math.min((timestamp - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+          var value = Math.round(target * eased);
+          el.textContent = value + suffix;
+          if (progress < 1) {
+            window.requestAnimationFrame(step);
+          } else {
+            el.textContent = target + suffix;
+          }
+        }
+        window.requestAnimationFrame(step);
+      });
+    }
+
+    var strip = document.querySelector(".stat-strip");
+    if (!strip) return;
+
+    if ("IntersectionObserver" in window) {
+      var obs = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              runCount();
+              obs.disconnect();
+            }
+          });
+        },
+        { threshold: 0.4 }
+      );
+      obs.observe(strip);
+    } else {
+      runCount();
+    }
+  }
+
+  /* ---------------- Live bell schedule ---------------- */
+  function initBellSchedule() {
+    var board = document.getElementById("bell-board");
+    var note = document.getElementById("bell-note");
+    if (!board) return;
+
+    // Standard high-school day, expressed in minutes after midnight.
+    var periods = [
+      { name: "Warning Bell",        start: 7 * 60 + 50, end: 7 * 60 + 55 },
+      { name: "Period 1",            start: 7 * 60 + 55, end: 8 * 60 + 45 },
+      { name: "Period 2",            start: 8 * 60 + 50, end: 9 * 60 + 40 },
+      { name: "Period 3",            start: 9 * 60 + 45, end: 10 * 60 + 35 },
+      { name: "Break",               start: 10 * 60 + 35, end: 10 * 60 + 50 },
+      { name: "Period 4",            start: 10 * 60 + 50, end: 11 * 60 + 40 },
+      { name: "Lunch",               start: 11 * 60 + 40, end: 12 * 60 + 20 },
+      { name: "Period 5",            start: 12 * 60 + 20, end: 13 * 60 + 10 },
+      { name: "Period 6",            start: 13 * 60 + 15, end: 14 * 60 + 5 },
+      { name: "Period 7",            start: 14 * 60 + 10, end: 15 * 60 }
+    ];
+
+    function fmt(mins) {
+      var h = Math.floor(mins / 60);
+      var m = mins % 60;
+      var suffix = h >= 12 ? "pm" : "am";
+      var h12 = h % 12;
+      if (h12 === 0) h12 = 12;
+      return h12 + ":" + (m < 10 ? "0" + m : m) + " " + suffix;
+    }
+
+    function render() {
+      var now = new Date();
+      var nowMins = now.getHours() * 60 + now.getMinutes();
+      var day = now.getDay(); // 0 Sun ... 6 Sat
+      var isWeekend = day === 0 || day === 6;
+
+      board.innerHTML = "";
+      var currentLabel = null;
+
+      periods.forEach(function (p) {
+        var row = document.createElement("div");
+        row.className = "bell-row";
+
+        var isNow = !isWeekend && nowMins >= p.start && nowMins < p.end;
+        var isDone = !isWeekend && nowMins >= p.end;
+        if (isNow) { row.classList.add("is-now"); currentLabel = p.name; }
+        if (isDone) row.classList.add("is-done");
+
+        var time = document.createElement("span");
+        time.className = "b-time";
+        time.textContent = fmt(p.start) + " \u2013 " + fmt(p.end);
+
+        var name = document.createElement("span");
+        name.className = "b-name";
+        name.textContent = p.name;
+
+        var status = document.createElement("span");
+        status.className = "b-status";
+        status.textContent = isNow ? "Now" : isDone ? "Complete" : "Upcoming";
+
+        row.appendChild(time);
+        row.appendChild(name);
+        row.appendChild(status);
+        board.appendChild(row);
+      });
+
+      if (note) {
+        if (isWeekend) {
+          note.textContent = "It's the weekend \u2014 school's out. This schedule will pick back up Monday morning.";
+        } else if (currentLabel) {
+          note.textContent = "Right now: " + currentLabel + ". Schedule updates automatically as the day goes on.";
+        } else if (nowMins < periods[0].start) {
+          note.textContent = "School hasn't started yet today \u2014 first bell rings at " + fmt(periods[0].start) + ".";
+        } else {
+          note.textContent = "The school day has ended. See you tomorrow.";
+        }
+      }
+    }
+
+    render();
+    // Keep it live without hammering the DOM — check once a minute.
+    window.setInterval(render, 60 * 1000);
+  }
+
+  /* ---------------- Admissions form ---------------- */
+  function initAdmissionsForm() {
+    var form = document.getElementById("admissions-form");
+    var status = document.getElementById("form-status");
+    if (!form || !status) return;
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      var name = document.getElementById("parent-name");
+      var email = document.getElementById("parent-email");
+      var grade = document.getElementById("student-grade");
+
+      if (!name.value.trim() || !email.value.trim() || !grade.value) {
+        status.textContent = "Please fill in every field so we can send the right packet.";
+        status.style.color = "#f2b8a0";
+        return;
+      }
+
+      var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email.value.trim())) {
+        status.textContent = "That email address doesn't look quite right \u2014 mind double-checking it?";
+        status.style.color = "#f2b8a0";
+        return;
+      }
+
+      status.textContent =
+        "Thanks, " + name.value.trim().split(" ")[0] + "! An enrollment packet for " +
+        grade.value + " is on its way to " + email.value.trim() + ".";
+      status.style.color = "#E8A73B";
+      form.reset();
+    });
+  }
+
+  /* ---------------- Footer: year + back to top ---------------- */
+  function initFooterExtras() {
+    var yearEl = document.getElementById("year");
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    var backBtn = document.getElementById("back-to-top");
+    if (backBtn) {
+      backBtn.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+  }
+})();
+
+</script>
 </body>
 </html>
